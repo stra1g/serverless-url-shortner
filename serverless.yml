@@ -1,0 +1,47 @@
+org: stra1g
+app: serverless-url-shortner
+service: serverless-url-shortner
+
+stages:
+  default:
+    params:
+      tableName: "short-urls-table-${sls:stage}"
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt: [ShortUrlsTable, Arn]
+  environment:
+    SHORT_URLS_TABLE: ${param:tableName}
+
+functions:
+  api:
+    handler: handler.handler
+    events:
+      - httpApi: "*"
+
+resources:
+  Resources:
+    ShortUrlsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: unique_identifier
+            AttributeType: S
+        KeySchema:
+          - AttributeName: unique_identifier
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${param:tableName}

@@ -1,0 +1,31 @@
+{
+  "name": "serverless-url-shortner",
+  "version": "1.0.0",
+  "author": {
+    "name": "Luís Vitor",
+    "email": "luis.sg.vitor@gmail.com",
+    "url": "https://github.com/stra1g"
+  },
+  "description": "A simple url shortner using serverless technologies",
+  "keywords": [
+    "serverless",
+    "url-shortner",
+    "aws",
+    "lambda",
+    "dynamodb",
+    "api-gateway",
+    "nodejs",
+    "typescript"
+  ],
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.585.0",
+    "@aws-sdk/lib-dynamodb": "^3.585.0",
+    "axios": "^1.7.9",
+    "express": "^4.19.2",
+    "serverless-http": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.1"
+  }
+}
