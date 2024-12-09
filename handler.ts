@@ -5,8 +5,15 @@ import serverless from "serverless-http";
 import { randomBytes } from "crypto";
 import axios from 'axios';
 import { verifyExpiration } from "./helpers/verify-expiration";
+import cors from 'cors';
 
 const app = express();
+
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 const SHORT_URLS_TABLE = process.env.SHORT_URLS_TABLE as string;
 const client = new DynamoDBClient();
