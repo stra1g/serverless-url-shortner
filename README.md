@@ -14,7 +14,7 @@ A simple URL shortener built using **AWS Lambda**, **API Gateway**, and **Server
    - Make sure **Node.js** (v16 or higher) and **pnpm** are installed.
    - Run the following commands to install dependencies:
 
-   pnpm install
+   `pnpm install`
 
 2. **Configure Serverless**:
    - Update the `serverless.yml` with your **AWS region** and **custom domain**.
@@ -23,14 +23,14 @@ A simple URL shortener built using **AWS Lambda**, **API Gateway**, and **Server
 3. **Test Locally with `serverless dev`**:
    - You can test your Lambda function locally before deployment using the following command:
 
-   serverless dev
+   `serverless dev`
 
    This will start the application locally and simulate the API Gateway and Lambda functions for easier local testing.
 
 4. **Deploy**:
    - Deploy the service using **Serverless Framework**:
 
-   serverless deploy
+   `serverless deploy`
 
 5. **Test the Deployed API**:
    - Once deployed, test the API endpoints using `Postman` or `curl`.
