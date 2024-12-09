@@ -1,11 +1,19 @@
 import express from 'express';
 import { createShortUrlController, redirectShortUrlController } from '../controllers/short-url.controller';
+import { ShortUrlServiceImpl } from '../services/short-url.service';
+import { MetricsServiceImpl } from '../../metrics/services/metrics.service';
 
 const router = express.Router();
 
-router.post('/short-url', createShortUrlController);
+const shortUrlService = new ShortUrlServiceImpl();
+const metricsService = new MetricsServiceImpl();
 
-router.get('/:identifier', redirectShortUrlController);
-router.post('/:identifier', redirectShortUrlController);
+const createHandler = createShortUrlController(shortUrlService);
+const redirectHandler = redirectShortUrlController(shortUrlService, metricsService);
+
+router.post('/short-url', createHandler);
+
+router.get('/:identifier', redirectHandler);
+router.post('/:identifier', redirectHandler);
 
 export { router as shortUrlRoutes };

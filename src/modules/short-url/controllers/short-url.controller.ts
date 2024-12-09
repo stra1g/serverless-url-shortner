@@ -1,14 +1,9 @@
 import { Request, Response } from 'express';
-import { ShortUrlServiceImpl } from '../services/short-url.service';
 import { ShortUrlService } from '../interfaces/short-url.interface';
 import { MetricsService } from '../../metrics/interfaces/metric.interface';
-import { MetricsServiceImpl } from '../../metrics/services/metrics.service';
 import { verifyExpiration } from '../../../helpers/verify-expiration';
 
-const shortUrlService: ShortUrlService = new ShortUrlServiceImpl();
-const metricsService: MetricsService = new MetricsServiceImpl();
-
-export const createShortUrlController = async (req: Request, res: Response): Promise<void> => {
+export const createShortUrlController = (shortUrlService: ShortUrlService) => async (req: Request, res: Response): Promise<void> => {
   const { original_url, ttl } = req.body;
 
   if (!original_url || typeof original_url !== 'string') {
@@ -25,7 +20,7 @@ export const createShortUrlController = async (req: Request, res: Response): Pro
   }
 };
 
-export const redirectShortUrlController = async (req: Request, res: Response): Promise<void> => {
+export const redirectShortUrlController = (shortUrlService: ShortUrlService, metricsService: MetricsService) => async (req: Request, res: Response): Promise<void> => {
   const identifier = req.params.identifier;
 
   try {
