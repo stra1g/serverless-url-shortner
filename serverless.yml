@@ -6,6 +6,7 @@ stages:
   default:
     params:
       tableName: "short-urls-table-${sls:stage}"
+      metricsTableName: "short-urls-metrics-${sls:stage}"
 
 provider:
   name: aws
@@ -23,8 +24,10 @@ provider:
             - dynamodb:DeleteItem
           Resource:
             - Fn::GetAtt: [ShortUrlsTable, Arn]
+            - Fn::GetAtt: [ShortUrlsMetricsTable, Arn]
   environment:
     SHORT_URLS_TABLE: ${param:tableName}
+    METRICS_TABLE: ${param:metricsTableName}
 
 functions:
   api:
@@ -45,3 +48,15 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         TableName: ${param:tableName}
+
+    ShortUrlsMetricsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: unique_identifier
+            AttributeType: S
+        KeySchema:
+          - AttributeName: unique_identifier
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${param:metricsTableName}

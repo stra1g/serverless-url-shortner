@@ -1,5 +1,5 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, GetCommand, PutCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import express from "express";
 import serverless from "serverless-http";
 import { randomBytes } from "crypto";
@@ -16,6 +16,7 @@ app.use(cors({
 }));
 
 const SHORT_URLS_TABLE = process.env.SHORT_URLS_TABLE as string;
+const METRICS_TABLE = process.env.METRICS_TABLE as string;
 const client = new DynamoDBClient();
 const docClient = DynamoDBDocumentClient.from(client);
 
@@ -100,6 +101,27 @@ app.post("/:identifier", async (req, res) => {
         res.status(405).json({ error: 'This URL only accepts POST requests' });
         return
       }
+
+      const metricsParams = {
+        TableName: METRICS_TABLE,
+        Key: {
+          unique_identifier: req.params.identifier.toString(),
+        },
+        UpdateExpression: "SET access_count = if_not_exists(access_count, :zero) + :increment, last_accessed = :lastAccessed",
+        ExpressionAttributeValues: {
+          ":increment": 1,
+          ":zero": 0,
+          ":lastAccessed": new Date().toISOString(),
+        },
+        ReturnValues: "UPDATED_NEW" as const,
+      };
+
+      try {
+        await docClient.send(new UpdateCommand(metricsParams));
+        console.log(`Metrics updated for identifier: ${req.params.identifier}`);
+      } catch (metricsError) {
+        console.error('Error updating metrics:', metricsError);
+      }
       
       axios.post(original_url, req.body)
 
@@ -140,12 +162,33 @@ app.get("/:identifier", async (req, res) => {
       const isExpired = verifyExpiration(expires_at);
       if (isExpired) {
         res.status(410).json({ error: 'Short URL has expired' });
-        return
+        return;
       }
 
       if (http_method.toLowerCase() !== 'get') {
         res.status(405).json({ error: 'This URL only accepts GET requests' });
-        return
+        return;
+      }
+
+      const metricsParams = {
+        TableName: METRICS_TABLE,
+        Key: {
+          unique_identifier: req.params.identifier.toString(),
+        },
+        UpdateExpression: "SET access_count = if_not_exists(access_count, :zero) + :increment, last_accessed = :lastAccessed",
+        ExpressionAttributeValues: {
+          ":increment": 1,
+          ":zero": 0,
+          ":lastAccessed": new Date().toISOString(),
+        },
+        ReturnValues: "UPDATED_NEW" as const,
+      };
+
+      try {
+        await docClient.send(new UpdateCommand(metricsParams));
+        console.log(`Metrics updated for identifier: ${req.params.identifier}`);
+      } catch (metricsError) {
+        console.error('Error updating metrics:', metricsError);
       }
 
       return res.redirect(302, original_url);
@@ -153,12 +196,12 @@ app.get("/:identifier", async (req, res) => {
       res
         .status(404)
         .json({ error: 'Could not find short URL with the given identifier' });
-      return
+      return;
     }
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Could not retrieve short URL' });
-    return
+    return;
   }
 });
 
