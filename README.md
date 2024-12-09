@@ -1,90 +1,68 @@
-<!--
-title: 'Serverless Framework Node Express API service backed by DynamoDB on AWS'
-description: 'This template demonstrates how to develop and deploy a simple Node Express API service backed by DynamoDB running on AWS Lambda using the Serverless Framework.'
-layout: Doc
-framework: v4
-platform: AWS
-language: nodeJS
-priority: 1
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, Inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
+# URL Shortener API 🌐
 
-# Serverless Framework Node Express API on AWS
+A simple URL shortener built using **AWS Lambda**, **API Gateway**, and **Serverless Framework** with **Node.js**. The API allows creating short URLs, managing expiration times, and supports both `GET` and `POST` HTTP methods for the shortened URLs.
 
-This template demonstrates how to develop and deploy a simple Node Express API service, backed by DynamoDB table, running on AWS Lambda using the Serverless Framework.
 
-This template configures a single function, `api`, which is responsible for handling all incoming requests using the `httpApi` event. To learn more about `httpApi` event configuration options, please refer to [httpApi event docs](https://www.serverless.com/framework/docs/providers/aws/events/http-api/). As the event is configured in a way to accept all incoming requests, the Express.js framework is responsible for routing and handling requests internally. This implementation uses the `serverless-http` package to transform the incoming event request payloads to payloads compatible with Express.js. To learn more about `serverless-http`, please refer to the [serverless-http README](https://github.com/dougmoscrop/serverless-http).
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![AmazonDynamoDB](https://img.shields.io/badge/Amazon%20DynamoDB-4053D6?style=for-the-badge&logo=Amazon%20DynamoDB&logoColor=white)
 
-Additionally, it also handles provisioning of a DynamoDB database that is used for storing data about users. The Express.js application exposes two endpoints, `POST /users` and `GET /user/:userId`, which create and retrieve a user record.
+## How to Deploy
 
-## Usage
+1. **Install Dependencies**:
+   - Make sure **Node.js** (v16 or higher) and **pnpm** are installed.
+   - Run the following commands to install dependencies:
 
-### Deployment
+   pnpm install
 
-Install dependencies with:
+2. **Configure Serverless**:
+   - Update the `serverless.yml` with your **AWS region** and **custom domain**.
+   - Ensure your **AWS credentials** are configured (via environment variables, AWS CLI, etc.).
 
-```
-npm install
-```
+3. **Test Locally with `serverless dev`**:
+   - You can test your Lambda function locally before deployment using the following command:
 
-and then deploy with:
+   serverless dev
 
-```
-serverless deploy
-```
+   This will start the application locally and simulate the API Gateway and Lambda functions for easier local testing.
 
-After running deploy, you should see output similar to:
+4. **Deploy**:
+   - Deploy the service using **Serverless Framework**:
 
-```
-Deploying "aws-node-express-dynamodb-api" to stage "dev" (us-east-1)
+   serverless deploy
 
-✔ Service deployed to stack aws-node-express-dynamodb-api-dev (109s)
+5. **Test the Deployed API**:
+   - Once deployed, test the API endpoints using `Postman` or `curl`.
+   - The **custom domain** for the API is: [https://api.stra1g.one/](https://api.stra1g.one/).
 
-endpoint: ANY - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com
-functions:
-  api: aws-node-express-dynamodb-api-dev-api (3.8 MB)
-```
+---
 
-_Note_: In current form, after deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [`httpApi` event docs](https://www.serverless.com/framework/docs/providers/aws/events/http-api/). Additionally, in current configuration, the DynamoDB table will be removed when running `serverless remove`. To retain the DynamoDB table even after removal of the stack, add `DeletionPolicy: Retain` to its resource definition.
+## Features
 
-### Invocation
+- **Short URL creation** with custom TTL.
+- **Expiration check** for each short URL.
+- Supports both **GET** and **POST** methods for shortened URLs.
+- **Redirects** for `GET` requests and **POST forwarding** for `POST` requests.
 
-After successful deployment, you can create a new user by calling the corresponding endpoint:
+---
 
-```
-curl --request POST 'https://xxxxxx.execute-api.us-east-1.amazonaws.com/users' --header 'Content-Type: application/json' --data-raw '{"name": "John", "userId": "someUserId"}'
-```
+## Tech Stack Overview
 
-Which should result in the following response:
+- **Serverless Framework** for easy deployment and management of Lambda functions.
+- **AWS Lambda** for serverless function execution.
+- **API Gateway** to expose the Lambda functions as HTTP endpoints.
+- **AWS DynamoDB** to store the short URL data.
 
-```json
-{ "userId": "someUserId", "name": "John" }
-```
+---
 
-You can later retrieve the user by `userId` by calling the following endpoint:
+### API Gateway Setup with Custom Domain
 
-```
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/users/someUserId
-```
+1. **Route 53**: Add a CNAME record that points to the **API Gateway URL** (e.g., `your-api-id.execute-api.us-east-1.amazonaws.com`).
+2. **ACM (AWS Certificate Manager)**: Issue an SSL certificate for the custom domain (e.g., `api.stra1g.one`).
+3. **API Gateway**: Map the custom domain (`api.stra1g.one`) to the API.
+4. **Deploy the changes** in **API Gateway** and **Route 53**.
 
-Which should result in the following response:
+---
 
-```json
-{ "userId": "someUserId", "name": "John" }
-```
-
-### Local development
-
-The easiest way to develop and test your function is to use the `dev` command:
-
-```
-serverless dev
-```
-
-This will start a local emulator of AWS Lambda and tunnel your requests to and from AWS Lambda, allowing you to interact with your function as if it were running in the cloud.
-
-Now you can invoke the function as before, but this time the function will be executed locally. Now you can develop your function locally, invoke it, and see the results immediately without having to re-deploy.
-
-When you are done developing, don't forget to run `serverless deploy` to deploy the function to the cloud.
+Made by **@stra1g**
