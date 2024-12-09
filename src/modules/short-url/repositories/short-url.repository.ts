@@ -29,7 +29,7 @@ export class ShortUrlRepositoryImpl implements ShortUrlRepository {
     try {
       const command = new GetCommand(params);
       const { Item } = await docClient.send(command);
-      return Item as ShortUrl | null;
+      return Item ? (Item as ShortUrl) : null;
     } catch (error) {
       console.error('Error retrieving short URL:', error);
       return null;
