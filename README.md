@@ -65,4 +65,4 @@ A simple URL shortener built using **AWS Lambda**, **API Gateway**, and **Server
 
 ---
 
-Made by **@stra1g**
+Made by **@stra1g** 🖤
