@@ -6,6 +6,7 @@ import {
 import { ShortUrlServiceImpl } from '../../../../src/modules/short-url/services/short-url.service';
 import { MetricsServiceImpl } from '../../../../src/modules/metrics/services/metrics.service';
 import { ShortUrl } from '../../../../src/modules/short-url/models/short-url.model';
+import { verifyExpiration } from '../../../../src/helpers/verify-expiration';
 
 jest.mock('../../../../src/modules/short-url/services/short-url.service');
 jest.mock('../../../../src/modules/metrics/services/metrics.service');
@@ -21,9 +22,6 @@ describe('ShortUrl Controllers', () => {
     new ShortUrlServiceImpl() as jest.Mocked<ShortUrlServiceImpl>;
   const mockMetricsService =
     new MetricsServiceImpl() as jest.Mocked<MetricsServiceImpl>;
-  const {
-    verifyExpiration,
-  } = require('../../../../src/helpers/verify-expiration');
 
   const createController = createShortUrlController(mockShortUrlService);
   const redirectController = redirectShortUrlController(
@@ -32,9 +30,7 @@ describe('ShortUrl Controllers', () => {
   );
 
   beforeAll(() => {
-    // Mock global fetch for POST redirect scenarios
     global.fetch = jest.fn();
-    // Mock console.error to keep the terminal output clean
     jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 
@@ -122,7 +118,7 @@ describe('ShortUrl Controllers', () => {
       };
 
       mockShortUrlService.getShortUrl.mockResolvedValue(mockShortUrl);
-      verifyExpiration.mockReturnValue(true);
+      (verifyExpiration as jest.Mock).mockReturnValue(true);
 
       mockReq.params = { identifier: 'abc123' };
 
@@ -145,7 +141,7 @@ describe('ShortUrl Controllers', () => {
       };
 
       mockShortUrlService.getShortUrl.mockResolvedValue(mockShortUrl);
-      verifyExpiration.mockReturnValue(false);
+      (verifyExpiration as jest.Mock).mockReturnValue(false);
 
       mockReq.params = { identifier: 'abc123' };
       mockReq.method = 'GET';
@@ -169,7 +165,7 @@ describe('ShortUrl Controllers', () => {
 
       mockShortUrlService.getShortUrl.mockResolvedValue(mockShortUrl);
       mockMetricsService.incrementAccessCount.mockResolvedValue();
-      verifyExpiration.mockReturnValue(false);
+      (verifyExpiration as jest.Mock).mockReturnValue(false);
 
       mockReq.params = { identifier: 'abc123' };
       mockReq.method = 'GET';
@@ -196,7 +192,7 @@ describe('ShortUrl Controllers', () => {
 
       mockShortUrlService.getShortUrl.mockResolvedValue(mockShortUrl);
       mockMetricsService.incrementAccessCount.mockResolvedValue();
-      verifyExpiration.mockReturnValue(false);
+      (verifyExpiration as jest.Mock).mockReturnValue(false);
 
       const mockFetchResponse = {
         status: 201,
