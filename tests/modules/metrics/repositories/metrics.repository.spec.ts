@@ -1,8 +1,8 @@
-import { MetricsRepositoryImpl } from '../../../../src/modules/metrics/repositories/metrics.repository';
-import { docClient } from '../../../../src/config/dynamo-db-client';
+import { docClient } from '@config/dynamo-db-client';
 import { UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import { MetricsRepositoryImpl } from '@modules/metrics/repositories/metrics.repository';
 
-jest.mock('../../../../src/config/dynamo-db-client', () => ({
+jest.mock('@config/dynamo-db-client', () => ({
   docClient: {
     send: jest.fn(),
   },

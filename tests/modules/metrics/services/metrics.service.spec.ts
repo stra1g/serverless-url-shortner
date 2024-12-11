@@ -1,8 +1,8 @@
 import {
   MetricsRepository,
   MetricsService,
-} from '../../../../src/modules/metrics/interfaces/metric.interface';
-import { MetricsServiceImpl } from '../../../../src/modules/metrics/services/metrics.service';
+} from '@modules/metrics/interfaces/metric.interface';
+import { MetricsServiceImpl } from '@modules/metrics/services/metrics.service';
 
 describe('MetricsServiceImpl', () => {
   let mockRepository: jest.Mocked<MetricsRepository>;

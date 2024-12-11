@@ -1,7 +1,7 @@
-import { docClient } from '../../../config/dynamo-db-client';
-import { ShortUrlRepository } from '../interfaces/short-url.interface';
-import { ShortUrl } from '../models/short-url.model';
 import { PutCommand, GetCommand } from '@aws-sdk/lib-dynamodb';
+import { docClient } from '@config/dynamo-db-client';
+import { ShortUrlRepository } from '@modules/short-url/interfaces/short-url.interface';
+import { ShortUrl } from '@modules/short-url/models/short-url.model';
 
 export class ShortUrlRepositoryImpl implements ShortUrlRepository {
   async createShortUrl(payload: ShortUrl): Promise<ShortUrl> {

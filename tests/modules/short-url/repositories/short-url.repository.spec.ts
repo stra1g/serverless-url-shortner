@@ -1,9 +1,9 @@
 import { PutCommand, GetCommand } from '@aws-sdk/lib-dynamodb';
-import { ShortUrlRepositoryImpl } from '../../../../src/modules/short-url/repositories/short-url.repository';
-import { docClient } from '../../../../src/config/dynamo-db-client';
-import { ShortUrl } from '../../../../src/modules/short-url/models/short-url.model';
+import { docClient } from '@config/dynamo-db-client';
+import { ShortUrl } from '@modules/short-url/models/short-url.model';
+import { ShortUrlRepositoryImpl } from '@modules/short-url/repositories/short-url.repository';
 
-jest.mock('../../../../src/config/dynamo-db-client', () => ({
+jest.mock('@config/dynamo-db-client', () => ({
   docClient: {
     send: jest.fn(),
   },

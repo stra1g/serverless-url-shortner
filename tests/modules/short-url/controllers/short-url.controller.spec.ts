@@ -1,16 +1,16 @@
-import { Request, Response } from 'express';
+import { verifyExpiration } from '@helpers/verify-expiration';
+import { MetricsServiceImpl } from '@modules/metrics/services/metrics.service';
 import {
   createShortUrlController,
   redirectShortUrlController,
-} from '../../../../src/modules/short-url/controllers/short-url.controller';
-import { ShortUrlServiceImpl } from '../../../../src/modules/short-url/services/short-url.service';
-import { MetricsServiceImpl } from '../../../../src/modules/metrics/services/metrics.service';
-import { ShortUrl } from '../../../../src/modules/short-url/models/short-url.model';
-import { verifyExpiration } from '../../../../src/helpers/verify-expiration';
+} from '@modules/short-url/controllers/short-url.controller';
+import { ShortUrl } from '@modules/short-url/models/short-url.model';
+import { ShortUrlServiceImpl } from '@modules/short-url/services/short-url.service';
+import { Request, Response } from 'express';
 
-jest.mock('../../../../src/modules/short-url/services/short-url.service');
-jest.mock('../../../../src/modules/metrics/services/metrics.service');
-jest.mock('../../../../src/helpers/verify-expiration', () => ({
+jest.mock('@modules/short-url/services/short-url.service');
+jest.mock('@modules/metrics/services/metrics.service');
+jest.mock('@helpers/verify-expiration', () => ({
   verifyExpiration: jest.fn(),
 }));
 

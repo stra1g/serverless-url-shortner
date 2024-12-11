@@ -1,4 +1,4 @@
-import { ShortUrl } from '../models/short-url.model';
+import { ShortUrl } from '@modules/short-url/models/short-url.model';
 
 export interface ShortUrlRepository {
   createShortUrl(payload: ShortUrl): Promise<ShortUrl>;

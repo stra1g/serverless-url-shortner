@@ -1,7 +1,7 @@
+import { verifyExpiration } from '@helpers/verify-expiration';
+import { MetricsService } from '@modules/metrics/interfaces/metric.interface';
+import { ShortUrlService } from '@modules/short-url/interfaces/short-url.interface';
 import { Request, Response } from 'express';
-import { ShortUrlService } from '../interfaces/short-url.interface';
-import { MetricsService } from '../../metrics/interfaces/metric.interface';
-import { verifyExpiration } from '../../../helpers/verify-expiration';
 
 export const createShortUrlController =
   (shortUrlService: ShortUrlService) =>

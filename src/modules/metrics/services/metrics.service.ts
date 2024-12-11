@@ -1,8 +1,8 @@
 import {
   MetricsRepository,
   MetricsService,
-} from '../interfaces/metric.interface';
-import { MetricsRepositoryImpl } from '../repositories/metrics.repository';
+} from '@modules/metrics/interfaces/metric.interface';
+import { MetricsRepositoryImpl } from '@modules/metrics/repositories/metrics.repository';
 
 export class MetricsServiceImpl implements MetricsService {
   private metricsRepository: MetricsRepository;

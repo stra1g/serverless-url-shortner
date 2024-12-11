@@ -1,10 +1,10 @@
-import express from 'express';
+import { MetricsServiceImpl } from '@modules/metrics/services/metrics.service';
 import {
   createShortUrlController,
   redirectShortUrlController,
-} from '../controllers/short-url.controller';
-import { ShortUrlServiceImpl } from '../services/short-url.service';
-import { MetricsServiceImpl } from '../../metrics/services/metrics.service';
+} from '@modules/short-url/controllers/short-url.controller';
+import { ShortUrlServiceImpl } from '@modules/short-url/services/short-url.service';
+import express from 'express';
 
 const router = express.Router();
 

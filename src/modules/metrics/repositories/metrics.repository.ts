@@ -1,6 +1,6 @@
-import { docClient } from '../../../config/dynamo-db-client';
-import { MetricsRepository } from '../interfaces/metric.interface';
 import { UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import { docClient } from '@config/dynamo-db-client';
+import { MetricsRepository } from '@modules/metrics/interfaces/metric.interface';
 
 export class MetricsRepositoryImpl implements MetricsRepository {
   async updateMetrics(identifier: string, increment: number): Promise<void> {

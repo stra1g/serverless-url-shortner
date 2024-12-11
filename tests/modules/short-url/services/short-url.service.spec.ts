@@ -1,9 +1,9 @@
 import {
   ShortUrlRepository,
   ShortUrlService,
-} from '../../../../src/modules/short-url/interfaces/short-url.interface';
-import { ShortUrlServiceImpl } from '../../../../src/modules/short-url/services/short-url.service';
-import { ShortUrl } from '../../../../src/modules/short-url/models/short-url.model';
+} from '@modules/short-url/interfaces/short-url.interface';
+import { ShortUrl } from '@modules/short-url/models/short-url.model';
+import { ShortUrlServiceImpl } from '@modules/short-url/services/short-url.service';
 
 jest.mock('crypto', () => ({
   randomBytes: jest

@@ -1,4 +1,4 @@
-import { verifyExpiration } from '../../src/helpers/verify-expiration';
+import { verifyExpiration } from '@helpers/verify-expiration';
 
 describe('verifyExpiration', () => {
   const fixedTimestampInSeconds = 1672531200; // Example: 2023-01-01T00:00:00Z

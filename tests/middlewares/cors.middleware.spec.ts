@@ -1,5 +1,5 @@
+import corsMiddleware from '@middlewares/cors.middleware';
 import { Request, Response, NextFunction } from 'express';
-import corsMiddleware from '../../src/middlewares/cors.middleware';
 
 describe('corsMiddleware', () => {
   let req: Partial<Request>;
