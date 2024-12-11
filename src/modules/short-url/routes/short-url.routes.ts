@@ -1,5 +1,8 @@
 import express from 'express';
-import { createShortUrlController, redirectShortUrlController } from '../controllers/short-url.controller';
+import {
+  createShortUrlController,
+  redirectShortUrlController,
+} from '../controllers/short-url.controller';
 import { ShortUrlServiceImpl } from '../services/short-url.service';
 import { MetricsServiceImpl } from '../../metrics/services/metrics.service';
 
@@ -9,7 +12,10 @@ const shortUrlService = new ShortUrlServiceImpl();
 const metricsService = new MetricsServiceImpl();
 
 const createHandler = createShortUrlController(shortUrlService);
-const redirectHandler = redirectShortUrlController(shortUrlService, metricsService);
+const redirectHandler = redirectShortUrlController(
+  shortUrlService,
+  metricsService,
+);
 
 router.post('/short-url', createHandler);
 

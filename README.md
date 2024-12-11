@@ -2,7 +2,6 @@
 
 A simple URL shortener built using **AWS Lambda**, **API Gateway**, and **Serverless Framework** with **Node.js**. The API allows creating short URLs, managing expiration times, and supports both `GET` and `POST` HTTP methods for the shortened URLs.
 
-
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
@@ -11,16 +10,19 @@ A simple URL shortener built using **AWS Lambda**, **API Gateway**, and **Server
 ## How to Deploy
 
 1. **Install Dependencies**:
+
    - Make sure **Node.js** (v16 or higher) and **pnpm** are installed.
    - Run the following commands to install dependencies:
 
    `pnpm install`
 
 2. **Configure Serverless**:
+
    - Update the `serverless.yml` with your **AWS region** and **custom domain**.
    - Ensure your **AWS credentials** are configured (via environment variables, AWS CLI, etc.).
 
 3. **Test Locally with `serverless dev`**:
+
    - You can test your Lambda function locally before deployment using the following command:
 
    `serverless dev`
@@ -28,6 +30,7 @@ A simple URL shortener built using **AWS Lambda**, **API Gateway**, and **Server
    This will start the application locally and simulate the API Gateway and Lambda functions for easier local testing.
 
 4. **Deploy**:
+
    - Deploy the service using **Serverless Framework**:
 
    `serverless deploy`

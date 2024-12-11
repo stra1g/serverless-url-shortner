@@ -5,8 +5,8 @@ service: serverless-url-shortner
 stages:
   default:
     params:
-      tableName: "short-urls-table-${sls:stage}"
-      metricsTableName: "short-urls-metrics-${sls:stage}"
+      tableName: 'short-urls-table-${sls:stage}'
+      metricsTableName: 'short-urls-metrics-${sls:stage}'
 
 provider:
   name: aws
@@ -33,7 +33,7 @@ functions:
   api:
     handler: handler.handler
     events:
-      - httpApi: "*"
+      - httpApi: '*'
 
 resources:
   Resources:

@@ -1,10 +1,15 @@
-import { MetricsRepository, MetricsService } from '../interfaces/metric.interface';
+import {
+  MetricsRepository,
+  MetricsService,
+} from '../interfaces/metric.interface';
 import { MetricsRepositoryImpl } from '../repositories/metrics.repository';
 
 export class MetricsServiceImpl implements MetricsService {
   private metricsRepository: MetricsRepository;
 
-  constructor(metricsRepository: MetricsRepository = new MetricsRepositoryImpl()) {
+  constructor(
+    metricsRepository: MetricsRepository = new MetricsRepositoryImpl(),
+  ) {
     this.metricsRepository = metricsRepository;
   }
 

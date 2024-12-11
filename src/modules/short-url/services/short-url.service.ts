@@ -1,4 +1,7 @@
-import { ShortUrlService, ShortUrlRepository } from '../interfaces/short-url.interface';
+import {
+  ShortUrlService,
+  ShortUrlRepository,
+} from '../interfaces/short-url.interface';
 import { ShortUrl } from '../models/short-url.model';
 import { ShortUrlRepositoryImpl } from '../repositories/short-url.repository';
 import { randomBytes } from 'crypto';
@@ -6,7 +9,9 @@ import { randomBytes } from 'crypto';
 export class ShortUrlServiceImpl implements ShortUrlService {
   private shortUrlRepository: ShortUrlRepository;
 
-  constructor(shortUrlRepository: ShortUrlRepository = new ShortUrlRepositoryImpl()) {
+  constructor(
+    shortUrlRepository: ShortUrlRepository = new ShortUrlRepositoryImpl(),
+  ) {
     this.shortUrlRepository = shortUrlRepository;
   }
 

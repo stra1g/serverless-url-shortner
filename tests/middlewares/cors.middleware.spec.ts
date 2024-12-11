@@ -11,7 +11,7 @@ describe('corsMiddleware', () => {
     res = {
       setHeader: jest.fn(),
       status: jest.fn().mockReturnThis(),
-      end: jest.fn()
+      end: jest.fn(),
     };
     next = jest.fn();
   });
@@ -21,9 +21,18 @@ describe('corsMiddleware', () => {
 
     corsMiddleware(req as Request, res as Response, next as NextFunction);
 
-    expect(res.setHeader).toHaveBeenCalledWith('Access-Control-Allow-Origin', '*');
-    expect(res.setHeader).toHaveBeenCalledWith('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    expect(res.setHeader).toHaveBeenCalledWith('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    expect(res.setHeader).toHaveBeenCalledWith(
+      'Access-Control-Allow-Origin',
+      '*',
+    );
+    expect(res.setHeader).toHaveBeenCalledWith(
+      'Access-Control-Allow-Methods',
+      'GET, POST, PUT, DELETE, OPTIONS',
+    );
+    expect(res.setHeader).toHaveBeenCalledWith(
+      'Access-Control-Allow-Headers',
+      'Content-Type, Authorization',
+    );
     expect(next).toHaveBeenCalled();
   });
 

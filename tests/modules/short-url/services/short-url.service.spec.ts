@@ -1,9 +1,14 @@
-import { ShortUrlRepository, ShortUrlService } from '../../../../src/modules/short-url/interfaces/short-url.interface';
+import {
+  ShortUrlRepository,
+  ShortUrlService,
+} from '../../../../src/modules/short-url/interfaces/short-url.interface';
 import { ShortUrlServiceImpl } from '../../../../src/modules/short-url/services/short-url.service';
 import { ShortUrl } from '../../../../src/modules/short-url/models/short-url.model';
 
 jest.mock('crypto', () => ({
-  randomBytes: jest.fn().mockReturnValue(Buffer.from('deadbeefcafebabe', 'hex'))
+  randomBytes: jest
+    .fn()
+    .mockReturnValue(Buffer.from('deadbeefcafebabe', 'hex')),
 }));
 
 describe('ShortUrlServiceImpl', () => {
@@ -31,7 +36,7 @@ describe('ShortUrlServiceImpl', () => {
         unique_identifier: 'deadbeefcafebabe',
         http_method: 'get',
         created_at: nowInSeconds,
-        expires_at: expectedExpiresAt
+        expires_at: expectedExpiresAt,
       };
 
       mockRepository.createShortUrl.mockResolvedValueOnce(expectedShortUrl);
@@ -40,10 +45,10 @@ describe('ShortUrlServiceImpl', () => {
 
       expect(mockRepository.createShortUrl).toHaveBeenCalledTimes(1);
       const callArg = mockRepository.createShortUrl.mock.calls[0][0];
-      
+
       expect(callArg.original_url).toBe(originalUrl);
       expect(callArg.unique_identifier).toBe('deadbeefcafebabe');
-      expect(callArg.created_at).toBeCloseTo(nowInSeconds, -1); 
+      expect(callArg.created_at).toBeCloseTo(nowInSeconds, -1);
       expect(callArg.expires_at).toBe(expectedExpiresAt);
       expect(callArg.http_method).toBe('get');
 
@@ -61,7 +66,7 @@ describe('ShortUrlServiceImpl', () => {
         unique_identifier: 'deadbeefcafebabe',
         http_method: 'get',
         created_at: nowInSeconds,
-        expires_at: expectedExpiresAt
+        expires_at: expectedExpiresAt,
       };
 
       mockRepository.createShortUrl.mockResolvedValueOnce(expectedShortUrl);
@@ -76,14 +81,21 @@ describe('ShortUrlServiceImpl', () => {
 
     it('should throw an error if repository creation fails', async () => {
       const originalUrl = 'https://error.com';
-      mockRepository.createShortUrl.mockRejectedValueOnce(new Error('Repository error'));
+      mockRepository.createShortUrl.mockRejectedValueOnce(
+        new Error('Repository error'),
+      );
 
       const originalConsoleError = console.error;
       console.error = jest.fn();
 
-      await expect(service.createShortUrl(originalUrl)).rejects.toThrow('Failed to create short URL');
+      await expect(service.createShortUrl(originalUrl)).rejects.toThrow(
+        'Failed to create short URL',
+      );
 
-      expect(console.error).toHaveBeenCalledWith('Error creating short URL:', expect.any(Error));
+      expect(console.error).toHaveBeenCalledWith(
+        'Error creating short URL:',
+        expect.any(Error),
+      );
       console.error = originalConsoleError;
     });
   });
@@ -96,13 +108,17 @@ describe('ShortUrlServiceImpl', () => {
         original_url: 'https://found.com',
         created_at: Math.floor(Date.now() / 1000),
         http_method: 'get',
-        expires_at: Math.floor(Date.now() / 1000) + 3600
+        expires_at: Math.floor(Date.now() / 1000) + 3600,
       };
 
-      mockRepository.getShortUrlByIdentifier.mockResolvedValueOnce(mockShortUrl);
+      mockRepository.getShortUrlByIdentifier.mockResolvedValueOnce(
+        mockShortUrl,
+      );
 
       const result = await service.getShortUrl(identifier);
-      expect(mockRepository.getShortUrlByIdentifier).toHaveBeenCalledWith(identifier);
+      expect(mockRepository.getShortUrlByIdentifier).toHaveBeenCalledWith(
+        identifier,
+      );
       expect(result).toEqual(mockShortUrl);
     });
 
@@ -111,20 +127,29 @@ describe('ShortUrlServiceImpl', () => {
       mockRepository.getShortUrlByIdentifier.mockResolvedValueOnce(null);
 
       const result = await service.getShortUrl(identifier);
-      expect(mockRepository.getShortUrlByIdentifier).toHaveBeenCalledWith(identifier);
+      expect(mockRepository.getShortUrlByIdentifier).toHaveBeenCalledWith(
+        identifier,
+      );
       expect(result).toBeNull();
     });
 
     it('should throw an error if retrieval fails', async () => {
       const identifier = 'error123';
-      mockRepository.getShortUrlByIdentifier.mockRejectedValueOnce(new Error('Repository error'));
+      mockRepository.getShortUrlByIdentifier.mockRejectedValueOnce(
+        new Error('Repository error'),
+      );
 
       const originalConsoleError = console.error;
       console.error = jest.fn();
 
-      await expect(service.getShortUrl(identifier)).rejects.toThrow('Failed to retrieve short URL');
+      await expect(service.getShortUrl(identifier)).rejects.toThrow(
+        'Failed to retrieve short URL',
+      );
 
-      expect(console.error).toHaveBeenCalledWith('Error retrieving short URL:', expect.any(Error));
+      expect(console.error).toHaveBeenCalledWith(
+        'Error retrieving short URL:',
+        expect.any(Error),
+      );
       console.error = originalConsoleError;
     });
   });

@@ -7,7 +7,8 @@ export class MetricsRepositoryImpl implements MetricsRepository {
     const params = {
       TableName: process.env.METRICS_TABLE as string,
       Key: { unique_identifier: identifier },
-      UpdateExpression: 'SET access_count = if_not_exists(access_count, :zero) + :increment, last_accessed = :lastAccessed',
+      UpdateExpression:
+        'SET access_count = if_not_exists(access_count, :zero) + :increment, last_accessed = :lastAccessed',
       ExpressionAttributeValues: {
         ':increment': increment,
         ':zero': 0,

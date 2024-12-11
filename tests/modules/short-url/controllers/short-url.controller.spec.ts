@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
-import { createShortUrlController, redirectShortUrlController } from '../../../../src/modules/short-url/controllers/short-url.controller';
+import {
+  createShortUrlController,
+  redirectShortUrlController,
+} from '../../../../src/modules/short-url/controllers/short-url.controller';
 import { ShortUrlServiceImpl } from '../../../../src/modules/short-url/services/short-url.service';
 import { MetricsServiceImpl } from '../../../../src/modules/metrics/services/metrics.service';
 import { ShortUrl } from '../../../../src/modules/short-url/models/short-url.model';
@@ -13,13 +16,20 @@ jest.mock('../../../../src/helpers/verify-expiration', () => ({
 describe('ShortUrl Controllers', () => {
   let mockReq: Partial<Request>;
   let mockRes: Partial<Response>;
-  
-  const mockShortUrlService = new ShortUrlServiceImpl() as jest.Mocked<ShortUrlServiceImpl>;
-  const mockMetricsService = new MetricsServiceImpl() as jest.Mocked<MetricsServiceImpl>;
-  const { verifyExpiration } = require('../../../../src/helpers/verify-expiration');
+
+  const mockShortUrlService =
+    new ShortUrlServiceImpl() as jest.Mocked<ShortUrlServiceImpl>;
+  const mockMetricsService =
+    new MetricsServiceImpl() as jest.Mocked<MetricsServiceImpl>;
+  const {
+    verifyExpiration,
+  } = require('../../../../src/helpers/verify-expiration');
 
   const createController = createShortUrlController(mockShortUrlService);
-  const redirectController = redirectShortUrlController(mockShortUrlService, mockMetricsService);
+  const redirectController = redirectShortUrlController(
+    mockShortUrlService,
+    mockMetricsService,
+  );
 
   beforeAll(() => {
     // Mock global fetch for POST redirect scenarios
@@ -44,10 +54,12 @@ describe('ShortUrl Controllers', () => {
 
   describe('createShortUrlController', () => {
     it('should return 400 if original_url is not provided or not a string', async () => {
-      mockReq.body = { original_url: 123 }; 
+      mockReq.body = { original_url: 123 };
       await createController(mockReq as Request, mockRes as Response);
       expect(mockRes.status).toHaveBeenCalledWith(400);
-      expect(mockRes.json).toHaveBeenCalledWith({ error: '"original_url" must be a string' });
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: '"original_url" must be a string',
+      });
     });
 
     it('should create a short URL and return 201', async () => {
@@ -64,19 +76,26 @@ describe('ShortUrl Controllers', () => {
 
       await createController(mockReq as Request, mockRes as Response);
 
-      expect(mockShortUrlService.createShortUrl).toHaveBeenCalledWith('https://example.com', 3600);
+      expect(mockShortUrlService.createShortUrl).toHaveBeenCalledWith(
+        'https://example.com',
+        3600,
+      );
       expect(mockRes.status).toHaveBeenCalledWith(201);
       expect(mockRes.json).toHaveBeenCalledWith(mockShortUrl);
     });
 
     it('should return 500 if service fails', async () => {
-      mockShortUrlService.createShortUrl.mockRejectedValue(new Error('Service error'));
+      mockShortUrlService.createShortUrl.mockRejectedValue(
+        new Error('Service error'),
+      );
       mockReq.body = { original_url: 'https://error.com' };
 
       await createController(mockReq as Request, mockRes as Response);
 
       expect(mockRes.status).toHaveBeenCalledWith(500);
-      expect(mockRes.json).toHaveBeenCalledWith({ error: 'Failed to create short URL' });
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Failed to create short URL',
+      });
     });
   });
 
@@ -88,7 +107,9 @@ describe('ShortUrl Controllers', () => {
       await redirectController(mockReq as Request, mockRes as Response);
 
       expect(mockRes.status).toHaveBeenCalledWith(404);
-      expect(mockRes.json).toHaveBeenCalledWith({ error: 'Short URL not found' });
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Short URL not found',
+      });
     });
 
     it('should return 410 if short URL is expired', async () => {
@@ -109,7 +130,9 @@ describe('ShortUrl Controllers', () => {
 
       expect(verifyExpiration).toHaveBeenCalledWith(mockShortUrl.expires_at);
       expect(mockRes.status).toHaveBeenCalledWith(410);
-      expect(mockRes.json).toHaveBeenCalledWith({ error: 'Short URL has expired' });
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Short URL has expired',
+      });
     });
 
     it('should return 405 if request method does not match short URL method', async () => {
@@ -130,7 +153,9 @@ describe('ShortUrl Controllers', () => {
       await redirectController(mockReq as Request, mockRes as Response);
 
       expect(mockRes.status).toHaveBeenCalledWith(405);
-      expect(mockRes.json).toHaveBeenCalledWith({ error: 'This URL only accepts POST requests' });
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'This URL only accepts POST requests',
+      });
     });
 
     it('should increment access count and redirect for GET requests', async () => {
@@ -151,8 +176,13 @@ describe('ShortUrl Controllers', () => {
 
       await redirectController(mockReq as Request, mockRes as Response);
 
-      expect(mockMetricsService.incrementAccessCount).toHaveBeenCalledWith('abc123');
-      expect(mockRes.redirect).toHaveBeenCalledWith(302, 'https://redirect.com');
+      expect(mockMetricsService.incrementAccessCount).toHaveBeenCalledWith(
+        'abc123',
+      );
+      expect(mockRes.redirect).toHaveBeenCalledWith(
+        302,
+        'https://redirect.com',
+      );
     });
 
     it('should increment access count and fetch for POST requests', async () => {
@@ -180,7 +210,9 @@ describe('ShortUrl Controllers', () => {
 
       await redirectController(mockReq as Request, mockRes as Response);
 
-      expect(mockMetricsService.incrementAccessCount).toHaveBeenCalledWith('abc123');
+      expect(mockMetricsService.incrementAccessCount).toHaveBeenCalledWith(
+        'abc123',
+      );
       expect(global.fetch).toHaveBeenCalledWith('https://postendpoint.com', {
         method: 'POST',
         body: JSON.stringify({ data: 'test' }),
@@ -190,13 +222,17 @@ describe('ShortUrl Controllers', () => {
     });
 
     it('should return 500 if an error occurs', async () => {
-      mockShortUrlService.getShortUrl.mockRejectedValue(new Error('Some error'));
+      mockShortUrlService.getShortUrl.mockRejectedValue(
+        new Error('Some error'),
+      );
       mockReq.params = { identifier: 'abc123' };
 
       await redirectController(mockReq as Request, mockRes as Response);
 
       expect(mockRes.status).toHaveBeenCalledWith(500);
-      expect(mockRes.json).toHaveBeenCalledWith({ error: 'Failed to redirect to short URL' });
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Failed to redirect to short URL',
+      });
     });
   });
 });

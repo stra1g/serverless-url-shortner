@@ -1,5 +1,8 @@
-import { MetricsRepository, MetricsService } from "../../../../src/modules/metrics/interfaces/metric.interface";
-import { MetricsServiceImpl } from "../../../../src/modules/metrics/services/metrics.service";
+import {
+  MetricsRepository,
+  MetricsService,
+} from '../../../../src/modules/metrics/interfaces/metric.interface';
+import { MetricsServiceImpl } from '../../../../src/modules/metrics/services/metrics.service';
 
 describe('MetricsServiceImpl', () => {
   let mockRepository: jest.Mocked<MetricsRepository>;
@@ -7,7 +10,7 @@ describe('MetricsServiceImpl', () => {
 
   beforeEach(() => {
     mockRepository = {
-      updateMetrics: jest.fn()
+      updateMetrics: jest.fn(),
     };
 
     metricsService = new MetricsServiceImpl(mockRepository);
@@ -25,16 +28,23 @@ describe('MetricsServiceImpl', () => {
   });
 
   it('should throw an error if updateMetrics fails', async () => {
-    mockRepository.updateMetrics.mockRejectedValueOnce(new Error('DynamoDB error'));
+    mockRepository.updateMetrics.mockRejectedValueOnce(
+      new Error('DynamoDB error'),
+    );
 
     const identifier = 'test-identifier';
 
     const originalConsoleError = console.error;
     console.error = jest.fn();
 
-    await expect(metricsService.incrementAccessCount(identifier)).rejects.toThrow('Failed to update metrics');
+    await expect(
+      metricsService.incrementAccessCount(identifier),
+    ).rejects.toThrow('Failed to update metrics');
 
-    expect(console.error).toHaveBeenCalledWith('Error incrementing access count:', expect.any(Error));
+    expect(console.error).toHaveBeenCalledWith(
+      'Error incrementing access count:',
+      expect.any(Error),
+    );
 
     console.error = originalConsoleError;
   });
