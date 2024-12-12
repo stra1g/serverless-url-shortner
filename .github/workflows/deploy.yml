@@ -16,9 +16,10 @@ jobs:
           node-version: '22'
       - run: corepack enable
       - run: corepack prepare pnpm@latest --activate
-      - run: pnpm install
+      - run: pnpm install --frozen-lockfile
       - run: pnpm type-check
       - run: pnpm test
+      - run: pnpm prune --prod
       - name: Serverless Deploy
         uses: serverless/github-action@v3.2
         with:
