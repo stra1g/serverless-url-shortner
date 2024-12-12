@@ -2,11 +2,10 @@ org: stra1g
 app: serverless-url-shortner
 service: serverless-url-shortner
 
-stages:
+params:
   default:
-    params:
-      tableName: 'short-urls-table-${sls:stage}'
-      metricsTableName: 'short-urls-metrics-${sls:stage}'
+    tableName: 'short-urls-table-${sls:stage}'
+    metricsTableName: 'short-urls-metrics-${sls:stage}'
 
 provider:
   name: aws
