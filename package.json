@@ -17,6 +17,12 @@
     "nodejs",
     "typescript"
   ],
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint ."
+  },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.709.0",
     "@aws-sdk/lib-dynamodb": "^3.709.0",
@@ -41,8 +47,5 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.0"
-  },
-  "scripts": {
-    "test": "jest"
   }
 }
