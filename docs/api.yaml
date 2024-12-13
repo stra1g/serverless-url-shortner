@@ -97,8 +97,8 @@ paths:
                     example: 'Failed to redirect to short URL'
 
     post:
-      summary: Update the redirection for a short URL
-      operationId: updateRedirect
+      summary: Call original URL with POST method
+      operationId: callOriginalUrlWithPost
       parameters:
         - in: path
           name: identifier
@@ -108,7 +108,7 @@ paths:
           description: The unique identifier for the shortened URL
       responses:
         '200':
-          description: Redirection updated successfully
+          description: Call original URL with POST method
         '410':
           description: Short URL has expired
           content:
