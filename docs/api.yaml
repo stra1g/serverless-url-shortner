@@ -3,6 +3,9 @@ info:
   title: URL Shortener API
   version: 1.0.0
   description: API for managing short URLs
+servers:
+  - url: https://api.stra1g.one/
+    description: Production server
 paths:
   /short-url:
     post:
