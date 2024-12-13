@@ -1,0 +1,141 @@
+openapi: 3.0.0
+info:
+  title: URL Shortener API
+  version: 1.0.0
+  description: API for managing short URLs
+paths:
+  /short-url:
+    post:
+      summary: Create a short URL
+      operationId: createShortUrl
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                original_url:
+                  type: string
+                  description: The original URL to be shortened
+                  example: 'https://example.com'
+                ttl:
+                  type: integer
+                  description: The time-to-live in seconds for the short URL
+                  example: 3600
+      responses:
+        '201':
+          description: URL successfully shortened
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  original_url:
+                    type: string
+                    example: 'https://example.com'
+                  unique_identifier:
+                    type: string
+                    example: 'abc123'
+                  http_method:
+                    type: string
+                    example: 'POST'
+                  created_at:
+                    type: integer
+                    format: int64
+                    example: 1635862800
+                  expires_at:
+                    type: integer
+                    format: int64
+                    example: 1635866400
+        '400':
+          description: Bad request
+
+  /{identifier}:
+    get:
+      summary: Redirect to the original URL
+      operationId: redirectToOriginalUrl
+      parameters:
+        - in: path
+          name: identifier
+          required: true
+          schema:
+            type: string
+          description: The unique identifier for the shortened URL
+      responses:
+        '302':
+          description: Redirect to the original URL
+        '410':
+          description: Short URL has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'Short URL has expired'
+        '405':
+          description: HTTP method mismatch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'This URL only accepts POST requests'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'Failed to redirect to short URL'
+
+    post:
+      summary: Update the redirection for a short URL
+      operationId: updateRedirect
+      parameters:
+        - in: path
+          name: identifier
+          required: true
+          schema:
+            type: string
+          description: The unique identifier for the shortened URL
+      responses:
+        '200':
+          description: Redirection updated successfully
+        '410':
+          description: Short URL has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'Short URL has expired'
+        '405':
+          description: HTTP method mismatch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'This URL only accepts POST requests'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'Failed to redirect to short URL'
