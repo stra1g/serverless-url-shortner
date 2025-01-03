@@ -21,7 +21,7 @@
     "type-check": "tsc --noEmit",
     "build": "tsc",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint . --fix --ignore-pattern pnpm-lock.yaml"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.709.0",

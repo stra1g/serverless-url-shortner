@@ -19,6 +19,15 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm type-check
       - run: pnpm test
+      - name: Run lint and fix issues
+        run: pnpm run lint
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          # Check if there are changes to commit
+          git diff --cached --quiet || (git commit -m "ci: auto fix linting issues" && git push)
       - run: pnpm prune --prod
       - name: Serverless Deploy
         uses: serverless/github-action@v3.2
